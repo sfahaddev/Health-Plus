@@ -1,0 +1,506 @@
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+
+/**
+ *
+ * @author Amna
+ */
+public class CheckUp extends javax.swing.JFrame {
+    private Queue<Medicine> allmedicine; 
+    ArrayList<BillingInfo> allrecord = new ArrayList<>();
+    ArrayList<Patient> allpatients = new ArrayList<>();
+
+
+  public CheckUp() {
+        allmedicine = new Queue<>(100);
+        initComponents();
+        ReadallPdata();
+        ReadallMdata();
+        ReadallRData();
+        LoadMed();
+        setLocationRelativeTo(null); // Center the window on the screen
+    }
+    private static final String ID_REGEX = "\\d+"; // Only digits
+    private static final String FEES_REGEX = "\\d*\\.?\\d+"; // Digits with optional decimal point
+    private static final String QUANTITY_REGEX = "\\d+"; // Only digits
+    
+   
+    private boolean validateId(String id) {
+       return Pattern.matches("\\d+", id);
+    }
+
+    private boolean validateFees(String fees) {
+       return Pattern.matches("\\d+", fees);
+    }
+
+    private boolean validateQuantity(String quantity) {
+        return Pattern.matches("\\d+", quantity);
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(null, message, "Validation Error", JOptionPane.ERROR_MESSAGE);
+    }
+    void LoadMed() {
+        allM.removeAllItems(); // Clear existing items
+        for (int i = 0; i < allmedicine.size(); i++) {
+            allM.addItem(allmedicine.get(i).getId() + ";" + allmedicine.get(i).getName()); // Add item to combo box
+        }
+    }
+
+   private void ReadallPdata() {
+   try{
+       File pfile = new File("patientdata.txt");
+       Scanner scanner =new Scanner(pfile);
+         while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                String[]curdata=data.split(";");
+                Patient patient =new Patient();
+                
+                patient.setId(Integer.parseInt(curdata[0]));
+                patient.setName(curdata[1]);
+                patient.setAge(Integer.parseInt(curdata[2]));
+                patient.setGender(curdata[3]);
+                patient.setAddress(curdata[4]);
+                patient.setContact(curdata[5]);
+                
+                allpatients.add(patient);
+                
+         }
+         scanner.close();
+   }catch(Exception e){
+       
+   }
+}
+      private void ReadallRData() {
+   try{
+       File pfile = new File("record.txt");
+       Scanner scanner =new Scanner(pfile);
+         while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                String[]curdata=data.split(";");
+                
+                BillingInfo record =new BillingInfo();
+                record.setPatientID(Integer.parseInt(curdata[0]));
+                record.setFee(Integer.parseInt(curdata[1]));
+                record.setRecomendation((curdata[2]));
+                record.setDate((curdata[3]));
+                String []mlist = curdata[4].split(",");
+                
+             for(int i=0; i<mlist.length; i++){
+                 record.setMedicineID(Integer.parseInt(mlist[i]));
+             }
+                
+                allrecord.add(record);
+                
+         }
+         scanner.close();
+   }catch(Exception e){
+       
+   }
+}
+
+   private void ReadallMdata() {
+   try{
+       File pfile = new File("Medicinedata.txt");
+       Scanner scanner =new Scanner(pfile);
+         while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                String[]curdata=data.split(";");
+                
+                Medicine medicine =new Medicine();
+                medicine.setId(Integer.parseInt(curdata[0]));
+                medicine.setName(curdata[1]);
+                medicine.setQuantity(Integer.parseInt(curdata[2]));
+                medicine.setSellingPrice(Integer.parseInt(curdata[3]));
+                medicine.setBuyingPrice(Integer.parseInt(curdata[4]));
+                medicine.setDescription(curdata[5]);
+                
+                allmedicine.enqueue(medicine);
+                
+         }
+         scanner.close();
+   }catch(Exception e){
+       
+   }
+}
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        fees = new javax.swing.JTextField();
+        allM = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Mlist = new javax.swing.JTextArea();
+        addMed = new javax.swing.JButton();
+        home = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        id = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        rec = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        save = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        quantity = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(730, 500));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        fees.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        fees.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                feesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(fees, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 160, 30));
+
+        allM.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        allM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                allMActionPerformed(evt);
+            }
+        });
+        jPanel1.add(allM, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 270, 30));
+
+        Mlist.setColumns(20);
+        Mlist.setRows(5);
+        jScrollPane1.setViewportView(Mlist);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 290, 250, 160));
+
+        addMed.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        addMed.setText("Add Medicines");
+        addMed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMedActionPerformed(evt);
+            }
+        });
+        jPanel1.add(addMed, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 230, 140, -1));
+
+        home.setBackground(new java.awt.Color(0, 102, 102));
+        home.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        home.setForeground(new java.awt.Color(255, 255, 255));
+        home.setText("Home");
+        home.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(home, new org.netbeans.lib.awtextra.AbsoluteConstraints(635, 10, 90, 30));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel1.setText("Medicines list");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 260, 110, 30));
+
+        id.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        id.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idActionPerformed(evt);
+            }
+        });
+        jPanel1.add(id, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, 160, 30));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel2.setText("Fees");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, 50, 30));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel3.setText("Patient ID");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, 100, 30));
+
+        rec.setColumns(20);
+        rec.setRows(5);
+        jScrollPane2.setViewportView(rec);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 280, 200));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel4.setText("Recomendation");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 130, 30));
+
+        save.setBackground(new java.awt.Color(0, 102, 102));
+        save.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        save.setForeground(new java.awt.Color(255, 255, 255));
+        save.setText("Save");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+        jPanel1.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 430, 90, 30));
+
+        jPanel2.setBackground(new java.awt.Color(153, 0, 0));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 480, 110, 20));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel6.setText("Medicine");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, 70, 30));
+
+        quantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityActionPerformed(evt);
+            }
+        });
+        jPanel1.add(quantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 190, 270, 30));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        jLabel5.setText("Quantity");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 190, 80, 30));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/CheckUp.jpeg"))); // NOI18N
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 490));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 760, 490));
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void feesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_feesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_feesActionPerformed
+
+    private void allMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_allMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_allMActionPerformed
+
+    private void idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idActionPerformed
+       
+    }//GEN-LAST:event_idActionPerformed
+ private boolean PatientIdExist() {
+    for (int i = 0; i < allpatients.size(); i++) {
+        Patient patient = allpatients.get(i);
+        // Check if the input text matches any patient ID
+        if (id.getText().equals(String.valueOf(patient.getId()))) {
+            return true;
+        }
+    }
+    return false;
+}
+  
+ void SaveallMdata(){//saving all the dsta in the txtfile for medicinesdata    
+    try (
+            FileWriter file = new FileWriter("Medicinedata.txt",true)) { // Use try-with-resources to automatically close FileWriter
+        for (int i = 0; i < allmedicine.size(); i++) {
+            file.write(allmedicine.get(i).getId() + ";" +
+                       allmedicine.get(i).getName() + ";" +
+                       allmedicine.get(i).getQuantity() + ";" +
+                       allmedicine.get(i).getSellingPrice() + ";" +
+                       allmedicine.get(i).getBuyingPrice() + ";" +
+                       allmedicine.get(i).getDescription()+"\n");
+            
+      
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+       }
+  
+  void SaveallRdata(){//saving all the dsta in the txtfile for records   
+    try (
+            FileWriter fileWriter = new FileWriter("record.txt",true)) { // Use try-with-resources to automatically close FileWriter
+        for (int i = 0; i < allrecord.size(); i++) {
+            fileWriter.write(allrecord.get(i).getPatientID() + ";" +
+                       allrecord.get(i).getFee() + ";" +
+                       allrecord.get(i).getRecomendation() + ";" +
+                       allrecord.get(i).getDate() + ";");
+            ArrayList<Integer>tmp=allrecord.get(i).getMedicineID();
+            for(int j=0;j<tmp.size();j++){
+                fileWriter.write(tmp.get(j)+",");
+            }
+            
+      fileWriter.write("\n");
+        }
+        fileWriter.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+       }
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        // TODO add your handling code here:
+         if (id.getText().isEmpty() || fees.getText().isEmpty() || rec.getText().isEmpty()) {
+            showError("All fields are required!");
+        } else if (!PatientIdExist()) {
+            showError("Patient ID doesn't exist or validation error!");
+        }
+        else{
+            BillingInfo billinginfo =new BillingInfo();
+            String bill="";
+            int total=0;
+            
+            billinginfo.setPatientID(Integer.parseInt(id.getText()));
+            billinginfo.setFee(Integer.parseInt(fees.getText()));
+            
+            String[] Mdata=Mlist.getText().split("\n");
+           
+            for(int i=0;i<Mdata.length;i++){
+                billinginfo.setMedicineID(Integer.parseInt(Mdata[i].split(";")[0]));
+                int curQ =Integer.parseInt(Mdata[i].split(";")[2]);
+                int curID =Integer.parseInt(Mdata[i].split(";")[0]);
+                // subtracting quantity when we select in checkup from medidine
+                for(int j=0;j<allmedicine.size();j++){
+                    if(allmedicine.get(j).getId()==curID){
+                         bill +=allmedicine.get(j).getName()+"  =  "+allmedicine.get(j).getSellingPrice()+"\n";
+                         total=allmedicine.get(j).getSellingPrice();
+                         
+                        allmedicine.get(j).setQuantity(allmedicine.get(j).getQuantity()-curQ);
+                    }
+                }
+            }
+            billinginfo.setRecomendation(rec.getText());
+            DateFormat cDateFormat =new SimpleDateFormat("dd:MM:yyyy");
+            
+            Date cdate= new Date();
+            billinginfo.setDate(cDateFormat.format(cdate));
+            
+            allrecord.add(billinginfo);
+            SaveallMdata();
+            SaveallRdata();
+            bill+="\nTotal Medicine cost : "+total;
+            bill+="\nDoctor fee : "+fees.getText();
+            
+            bill +="Total: "+(total+Integer.parseInt(fees.getText()));
+            
+            
+            JOptionPane.showConfirmDialog(null, "Your bill \n"+bill);
+            id.setText("");
+
+            
+            
+        }
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+        // TODO add your handling code here:
+                homepage home = new homepage();
+                setVisible(false);
+                home.setVisible(true);
+                this.dispose();
+        
+    }//GEN-LAST:event_homeActionPerformed
+
+    private void quantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_quantityActionPerformed
+
+    private void addMedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMedActionPerformed
+        // TODO add your handling code here:
+        if(quantity.getText().equals("")|| allM.getSelectedItem().toString().equals("")){
+            JOptionPane.showConfirmDialog(null, "Please select medicine or add quantity");
+        }
+        else if(CheckForQuantity()){
+                JOptionPane.showConfirmDialog(null, "Current quantity is greater than the avaiable quantity");
+
+        }
+        
+        else{
+            Mlist.append(allM.getSelectedItem()+";"+quantity.getText()+"\n");
+            quantity.setText("");
+        }
+
+     
+    }//GEN-LAST:event_addMedActionPerformed
+
+    boolean CheckForQuantity() {
+    // Split the selected item by semicolon to extract the ID
+    String selectedItem = allM.getSelectedItem().toString();
+    String[] parts = selectedItem.split(";");
+    int currMId = Integer.parseInt(parts[0]); // Parse the first part as an integer (ID)
+    
+    for (int i = 0; i < allmedicine.size(); i++) {
+        if (currMId == allmedicine.get(i).getId()) {
+            if (Integer.parseInt(quantity.getText()) > allmedicine.get(i).getQuantity()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+   
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CheckUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CheckUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CheckUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CheckUp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CheckUp().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea Mlist;
+    private javax.swing.JButton addMed;
+    private javax.swing.JComboBox<String> allM;
+    private javax.swing.JTextField fees;
+    private javax.swing.JButton home;
+    private javax.swing.JTextField id;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField quantity;
+    private javax.swing.JTextArea rec;
+    private javax.swing.JButton save;
+    // End of variables declaration//GEN-END:variables
+}
