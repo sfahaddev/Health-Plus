@@ -31,18 +31,10 @@ https://github.com/user-attachments/assets/86b7b68c-f23f-470b-a8d0-932f485faa28
 - **Improved Code Efficiency**: Enhanced code performance by 30% through optimized data structures
 - **Top Project Ranking**: Achieved az top three position in project evaluations
 
-## Installation and Usage 🚀
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sfahaddev/Health-Plus.git
-   ```
 
-2. Open the project in your preferred IDE.
 
-3. Compile and run the application.
 
-## Contributing 🤝
 
-Contributions are welcome! Please fork the repository and submit a pull request for review.
+
 
