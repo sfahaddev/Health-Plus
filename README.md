@@ -5,6 +5,12 @@
 
 This project is a Java-based Health Management System developed using JFrame and implementing data structure and algorithm (DSA) concepts. The system includes comprehensive features for managing patient appointments, records, and more.
 
+
+
+https://github.com/user-attachments/assets/86b7b68c-f23f-470b-a8d0-932f485faa28
+
+
+
 ## Features ✨
 
 - **User Authentication**: Login and signup functionality for secure access 🔐
